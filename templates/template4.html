@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When Selecting a Consultant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #F09719 0%, #FC6E5B 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        }
+        .header {
+            background: linear-gradient(135deg, #F09719 0%, #FC6E5B 100%);
+            padding: 35px 30px;
+            text-align: center;
+        }
+        .header h1 { color: white; font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+        .header .tag { background: rgba(255,255,255,0.2); color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; }
+        .content { padding: 40px 35px; }
+        .greeting { font-size: 16px; color: #555; margin-bottom: 25px; }
+        .message { font-size: 15px; color: #444; margin-bottom: 20px; }
+        .highlight-box { background: #f8f9fa; border-left: 4px solid #F09719; border-radius: 0 12px 12px 0; padding: 25px; margin: 30px 0; }
+        .highlight-box h3 { color: #F09719; font-size: 13px; margin-bottom: 15px; text-transform: uppercase; }
+        .property-info { margin-bottom: 15px; }
+        .property-info .label { font-weight: 600; color: #495057; font-size: 13px; display: block; margin-bottom: 5px; }
+        .property-info .value { color: #212529; font-size: 15px; font-weight: 500; }
+        .story-box { background: linear-gradient(135deg, #fff8f0 0%, #ffe8d6 100%); border-radius: 12px; padding: 25px; margin: 25px 0; border: 1px solid #F09719; }
+        .story-box h3 { color: #F09719; font-size: 13px; margin-bottom: 12px; }
+        .story-box p { font-size: 14px; color: #495057; }
+        .promise-list { margin: 20px 0; }
+        .promise-item { display: flex; align-items: flex-start; padding: 12px 0; }
+        .promise-item .check { color: #38ef7d; font-size: 18px; margin-right: 12px; }
+        .promise-item .text { color: #495057; font-size: 14px; }
+        .cta { background: #f8f9fa; border-radius: 12px; padding: 25px; text-align: center; margin-top: 30px; }
+        .cta p { font-size: 14px; color: #666; margin-bottom: 15px; }
+        .signature { margin-top: 35px; padding-top: 25px; border-top: 1px solid #e9ecef; }
+        .signature .name { font-weight: 600; color: #212529; font-size: 15px; }
+        .signature .title { color: #6c757d; font-size: 13px; margin-bottom: 8px; }
+        .signature .contact { font-size: 13px; color: #495057; }
+        .signature .contact a { color: #F09719; text-decoration: none; }
+        .signature .company-motto { margin-top: 12px; font-size: 12px; color: #adb5bd; font-style: italic; }
+        .footer { background: #f8f9fa; padding: 20px 30px; text-align: center; font-size: 12px; color: #adb5bd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>When Selecting a Consultant</h1>
+            <span class="tag">EMAIL 4 • Day 13</span>
+        </div>
+        <div class="content">
+            <p class="greeting">Hi,</p>
+            
+            <p class="message">Here's something worth knowing.</p>
+            
+            <p class="message">Most engineering firms do the inspection, file the report, and move on. When the city comes back with a deficiency notice (revision requests, re-inspection, additional documentation), the owner is on their own.</p>
+            
+            <div class="story-box">
+                <h3>What We've Seen</h3>
+                <p>I've seen that scenario play out too many times. What stays with people isn't just the extra cost. It's that they were completely alone, navigating a bureaucratic process they didn't fully understand, while their deadline kept moving closer.</p>
+            </div>
+            
+            <p class="message">We do it differently. We will stay with you through every city submission, every revision request, until you have the certificate in hand. That's not standard in this industry, but it should be.</p>
+            
+            <div class="promise-list">
+                <div class="promise-item">
+                    <span class="check">✓</span>
+                    <span class="text">We stay until you have your certificate</span>
+                </div>
+                <div class="promise-item">
+                    <span class="check">✓</span>
+                    <span class="text">We handle all city communications</span>
+                </div>
+                <div class="promise-item">
+                    <span class="check">✓</span>
+                    <span class="text">One point of contact throughout the process</span>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>Property Details</h3>
+                <div class="property-info">
+                    <span class="label">PROPERTY ADDRESS</span>
+                    <span class="value">{{Property Address}}</span>
+                </div>
+                <div class="property-info">
+                    <span class="label">FOLIO NUMBER</span>
+                    <span class="value">{{Folio Number}}</span>
+                </div>
+            </div>
+            
+            <p class="message">If you'd like to know what that looks like for {{Property Address}}, just reply.</p>
+            
+            <div class="cta">
+                <p>Interested in learning more?</p>
+                <a href="mailto:gt@engsv.com" style="display: inline-block; background: linear-gradient(135deg, #F09719 0%, #FC6E5B 100%); color: white; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px;">Contact Us</a>
+            </div>
+            
+            <div class="signature">
+                <p class="name">Genesis Torrealba</p>
+                <p class="title">Sales & Operations Coordinator</p>
+                <p class="contact">
+                    <a href="mailto:gt@engsv.com">gt@engsv.com</a> • Direct: 954-951-1482<br>
+                    <strong>Engineering Services, Inc.</strong><br>
+                    Office: 954-951-2121 • <a href="https://www.engsv.com">www.engsv.com</a>
+                </p>
+                <p class="company-motto">Committed engineering. Seamless compliance.</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>© 2026 Engineering Services, Inc. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recertification Status Inquiry</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 35px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .header .tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        .content {
+            padding: 40px 35px;
+        }
+        .greeting {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        .message {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 0 12px 12px 0;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        .highlight-box h3 {
+            color: #667eea;
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .property-info {
+            margin-bottom: 15px;
+        }
+        .property-info:last-child {
+            border-bottom: none;
+        }
+        .property-info .label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .property-info .value {
+            color: #212529;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .cta {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .cta p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .signature {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #e9ecef;
+        }
+        .signature .name {
+            font-weight: 600;
+            color: #212529;
+            font-size: 15px;
+        }
+        .signature .title {
+            color: #6c757d;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .signature .contact {
+            font-size: 13px;
+            color: #495057;
+        }
+        .signature .contact a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .signature .company-motto {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #adb5bd;
+            font-style: italic;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Recertification Status Inquiry</h1>
+            <span class="tag">EMAIL 1 • Day 1</span>
+        </div>
+        <div class="content">
+            <p class="greeting">Hi,</p>
+            
+            <p class="message">I came across {{Property Address}} (Folio {{Folio Number}}), it looks like this property may be coming up on a recertification requirement under Section 8-11(f) of Miami-Dade County rules.</p>
+            
+            <p class="message">Do you already have someone handling this? If yes, great. If not, it might be worth a quick conversation before the deadline creates pressure.</p>
+            
+            <div class="highlight-box">
+                <h3>Property Details</h3>
+                <div class="property-info">
+                    <span class="label">PROPERTY ADDRESS</span>
+                    <span class="value">{{Property Address}}</span>
+                </div>
+                <div class="property-info">
+                    <span class="label">FOLIO NUMBER</span>
+                    <span class="value">{{Folio Number}}</span>
+                </div>
+            </div>
+            
+            <p class="message">We handle structural, electrical, thermographic infrared (IR), and nighttime parking lot illumination inspections and reports for recertifications across South Florida (all four under one roof).</p>
+            
+            <p class="message">Just reply here if you'd like to talk. No pitch, just a conversation. We would be happy to explain or answer any questions you might have.</p>
+            
+            <div class="cta">
+                <p>Interested in discussing this?</p>
+                <a href="mailto:gt@engsv.com" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px;">Reply Here</a>
+            </div>
+            
+            <div class="signature">
+                <p class="name">Genesis Torrealba</p>
+                <p class="title">Sales & Operations Coordinator</p>
+                <p class="contact">
+                    <a href="mailto:gt@engsv.com">gt@engsv.com</a> • Direct: 954-951-1482<br>
+                    <strong>Engineering Services, Inc.</strong><br>
+                    Office: 954-951-2121 • <a href="https://www.engsv.com">www.engsv.com</a>
+                </p>
+                <p class="company-motto">Committed engineering. Seamless compliance.</p>
+            </div>
+        </div>
+        <div class="footer">
+            <p>© 2026 Engineering Services, Inc. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

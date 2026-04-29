@@ -1,0 +1,93 @@
+"""Módulo de gestión de templates HTML"""
+import os
+from pathlib import Path
+from typing import List, Dict
+
+
+# Subjects por defecto para cada template
+SUBJECTS = {
+    'template1.html': 'Inquiry about {address} Recertification Status',
+    'template2.html': 'Why you should not wait on the Recertification of {address}',
+    'template3.html': 'How to make the Recertification of {address} easier',
+    'template4.html': 'When selecting a consultant for {address} Recertification',
+    'template5.html': '{address} - Should I close your file?'
+}
+
+
+def obtener_ruta_templates() -> Path:
+    """Obtiene la ruta del directorio de templates."""
+    return Path(__file__).parent.parent / 'templates'
+
+
+def listar_templates() -> List[str]:
+    """Lista las plantillas disponibles."""
+    ruta = obtener_ruta_templates()
+    if not ruta.exists():
+        return []
+    archivos = sorted(os.listdir(ruta))
+    return [f for f in archivos if f.endswith('.html')]
+
+
+def obtener_template(nombre: str) -> str:
+    """Obtiene el contenido de una plantilla.
+    
+    Args:
+        nombre: Nombre del archivo de plantilla
+        
+    Returns:
+        Contenido HTML de la plantilla
+    """
+    ruta = obtener_ruta_templates() / nombre
+    if not ruta.exists():
+        raise FileNotFoundError(f"No se encontró la plantilla: {nombre}")
+    
+    with open(ruta, 'r', encoding='utf-8') as f:
+        return f.read()
+
+
+def aplicar_variables(template: str, variables: Dict[str, str]) -> str:
+    """Aplica variables a una plantilla.
+    
+    Args:
+        template: Contenido HTML de la plantilla
+        variables: Diccionario con variables a reemplazar
+        
+    Returns:
+        Template con variables reemplazadas
+    """
+    resultado = template
+    for clave, valor in variables.items():
+        resultado = resultado.replace('{{' + clave + '}}', str(valor))
+    return resultado
+
+
+def obtener_info_template(nombre: str) -> Dict:
+    """Obtiene información de una plantilla.
+    
+    Args:
+        nombre: Nombre del archivo
+        
+    Returns:
+        Diccionario con información
+    """
+    return {
+        'nombre': nombre,
+        'ruta': str(obtener_ruta_templates() / nombre),
+        'disponible': True
+    }
+
+
+def obtener_subject_template(nombre: str, property_address: str = '') -> str:
+    """Obtiene el subject para un template.
+    
+    Args:
+        nombre: Nombre del template
+        property_address: Dirección de la propiedad
+        
+    Returns:
+        Subject con la dirección reemplazada
+    """
+    subject = SUBJECTS.get(nombre, 'Email from Engineering Services')
+    if property_address:
+        subject = subject.replace('{address}', property_address)
+    return subject
