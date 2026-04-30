@@ -16,14 +16,22 @@ SUBJECTS = {
 
 def obtener_ruta_templates() -> Path:
     """Obtiene la ruta del directorio de templates."""
-    return Path(__file__).parent.parent / 'templates'
+    # Usar ruta absoluta desde la ubicación del script
+    base = Path(__file__).parent.parent.resolve()
+    return base / 'templates'
 
 
 def listar_templates() -> List[str]:
     """Lista las plantillas disponibles."""
+    import os
     ruta = obtener_ruta_templates()
+    
+    if not ruta.exists():
+        ruta = Path.cwd() / 'templates'
+    
     if not ruta.exists():
         return []
+    
     archivos = sorted(os.listdir(ruta))
     return [f for f in archivos if f.endswith('.html')]
 

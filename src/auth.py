@@ -9,7 +9,7 @@ CONFIG_FILE = 'config.json'
 
 def obtener_ruta_config() -> Path:
     """Obtiene la ruta del archivo de configuración."""
-    return Path(__file__).parent.parent / CONFIG_FILE
+    return Path(__file__).parent.parent.resolve() / CONFIG_FILE
 
 
 def cargar_credenciales() -> Dict:
@@ -49,7 +49,7 @@ def lista_cuentas() -> List[str]:
     return [c['nombre'] for c in config.get('credenciales', [])]
 
 
-def agregar_cuenta(nombre: str, email: str, app_password: str) -> None:
+def agregar_cuenta(nombre: str, email: str, app_password: str, sender_name: str = '') -> None:
     """Agrega una nueva cuenta."""
     config = obtener_config()
     
@@ -62,6 +62,7 @@ def agregar_cuenta(nombre: str, email: str, app_password: str) -> None:
         if c.get('nombre') == nombre:
             c['email'] = email
             c['app_password'] = app_password
+            c['sender_name'] = sender_name
             existe = True
             break
     
@@ -69,7 +70,8 @@ def agregar_cuenta(nombre: str, email: str, app_password: str) -> None:
         config['credenciales'].append({
             'nombre': nombre,
             'email': email,
-            'app_password': app_password
+            'app_password': app_password,
+            'sender_name': sender_name
         })
     
     # Si es la primera, seleccionarla

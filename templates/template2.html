@@ -3,137 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Why You Should Not Wait</title>
+    <title>Recertification Reminder</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-            line-height: 1.7;
-            color: #333;
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-        .container {
-            max-width: 640px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-        }
-        .header {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            padding: 35px 30px;
-            text-align: center;
-        }
-        .header h1 {
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .header .tag {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-block;
-        }
-        .content {
-            padding: 40px 35px;
-        }
-        .greeting { font-size: 16px; color: #555; margin-bottom: 25px; }
-        .message { font-size: 15px; color: #444; margin-bottom: 20px; }
-        .highlight-box {
-            background: #f8f9fa;
-            border-left: 4px solid #11998e;
-            border-radius: 0 12px 12px 0;
-            padding: 25px;
-            margin: 30px 0;
-        }
-        .highlight-box h3 { color: #11998e; font-size: 13px; margin-bottom: 15px; text-transform: uppercase; }
-        .property-info { margin-bottom: 15px; }
-        .property-info .label { font-weight: 600; color: #495057; font-size: 13px; display: block; margin-bottom: 5px; }
-        .property-info .value { color: #212529; font-size: 15px; font-weight: 500; }
-        .quote-box {
-            background: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            font-style: italic;
-            color: #6c757d;
-        }
-        .cta {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        .cta p { font-size: 14px; color: #666; margin-bottom: 15px; }
-        .signature { margin-top: 35px; padding-top: 25px; border-top: 1px solid #e9ecef; }
-        .signature .name { font-weight: 600; color: #212529; font-size: 15px; }
-        .signature .title { color: #6c757d; font-size: 13px; margin-bottom: 8px; }
-        .signature .contact { font-size: 13px; color: #495057; }
-        .signature .contact a { color: #11998e; text-decoration: none; }
-        .signature .company-motto { margin-top: 12px; font-size: 12px; color: #adb5bd; font-style: italic; }
-        .footer { background: #f8f9fa; padding: 20px 30px; text-align: center; font-size: 12px; color: #adb5bd; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: rgb(0,0,0); background: rgb(255,255,255); margin: 0; padding: 40px 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: rgb(255,255,255); border: 1px solid rgb(228,85,85); border-radius: 8px; }
+        .header { background: rgb(238,27,41); color: rgb(255,255,255); padding: 30px; text-align: center; border-radius: 7px 7px 0 0; }
+        .header h1 { margin: 0; font-size: 22px; font-weight: 600; }
+        .content { padding: 30px; }
+        .greeting { font-size: 15px; margin-bottom: 20px; }
+        .message { font-size: 14px; margin-bottom: 15px; }
+        .highlight { border-left: 4px solid rgb(238,27,41); padding-left: 15px; margin: 20px 0; }
+        .highlight-title { font-weight: bold; font-size: 14px; color: rgb(238,27,41); margin-bottom: 8px; }
+        .highlight-box { border: 1px solid rgb(228,85,85); border-radius: 6px; padding: 15px; margin: 15px 0; background: rgb(255,255,255); }
+        .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgb(228,85,85); }
+        .row:last-child { border: none; }
+        .label { color: rgb(238,27,41); font-weight: bold; font-size: 12px; }
+        .value { font-size: 14px; }
+        .cta { text-align: center; padding: 20px; background: rgb(255,255,255); border-radius: 6px; margin-top: 20px; }
+        .cta a { display: inline-block; background: rgb(238,27,41); color: rgb(255,255,255); padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgb(228,85,85); }
+        .signature .name { font-weight: bold; font-size: 15px; color: rgb(0,0,0); }
+        .signature .title { font-size: 13px; color: rgb(100,100,100); margin-bottom: 8px; }
+        .signature .contact { font-size: 13px; }
+        .signature .contact a { color: rgb(238,27,41); text-decoration: none; }
+        .signature .company { color: rgb(238,27,41); font-weight: bold; font-size: 14px; }
+        .signature .motto { font-size: 11px; color: rgb(150,150,150); font-style: italic; margin-top: 8px; }
+        .footer { background: rgb(248,248,248); padding: 15px; text-align: center; font-size: 11px; color: rgb(150,150,150); border-radius: 0 0 7px 7px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Why You Should Not Wait</h1>
-            <span class="tag">EMAIL 2 • Day 4</span>
+            <h1>Recertification Reminder</h1>
         </div>
         <div class="content">
             <p class="greeting">Hi,</p>
+            <p class="message">Following up on my last email regarding {{Property Address}} (Folio {{Folio Number}}).</p>
             
-            <p class="message">Over the years, we've worked with a lot of property owners on recertifications and the ones who waited always ended up paying more.</p>
-            
-            <p class="message">Not because the inspection itself gets more expensive, but because once the city gets involved first, it's never just the inspection anymore. It's fines, emergency timelines, re-inspections, and sometimes construction work just to get back into compliance.</p>
-            
-            <div class="quote-box">
-                <p>"One owner we worked with ended up spending close to three times what a routine recertification would have cost simply because the clock ran out."</p>
+            <div class="highlight">
+                <p class="highlight-title">QUICK RECAP</p>
+                <p class="message">This property may need a structural recertification under Miami-Dade County Section 8-11(f). We can help with the entire process.</p>
             </div>
             
-            <p class="message">Getting ahead of it for {{Property Address}} — while there's still runway is almost always the cheaper, calmer path.</p>
-            
             <div class="highlight-box">
-                <h3>Property Details</h3>
-                <div class="property-info">
+                <div class="row">
                     <span class="label">PROPERTY ADDRESS</span>
                     <span class="value">{{Property Address}}</span>
                 </div>
-                <div class="property-info">
+                <div class="row">
                     <span class="label">FOLIO NUMBER</span>
                     <span class="value">{{Folio Number}}</span>
                 </div>
             </div>
             
-            <p class="message">We can usually give you a clear picture of where things stand within 24 hours — no commitment needed. Happy to help if you'd like that.</p>
+            <p class="message">We provide structural, electrical, IR thermographic, and nighttime parking lot inspections—all in one report.</p>
             
             <div class="cta">
-                <p>Would you like more information?</p>
-                <a href="mailto:gt@engsv.com" style="display: inline-block; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px;">Get Info</a>
+                <a href="mailto:gt@engsv.com">Let's Talk</a>
             </div>
             
             <div class="signature">
                 <p class="name">Genesis Torrealba</p>
                 <p class="title">Sales & Operations Coordinator</p>
                 <p class="contact">
-                    <a href="mailto:gt@engsv.com">gt@engsv.com</a> • Direct: 954-951-1482<br>
-                    <strong>Engineering Services, Inc.</strong><br>
-                    Office: 954-951-2121 • <a href="https://www.engsv.com">www.engsv.com</a>
+                    <a href="mailto:gt@engsv.com">gt@engsv.com</a> | <strong>Direct:</strong> 954-951-1482<br>
+                    <span class="company">Engineering Services, Inc.</span><br>
+                    Office: 954-951-2121 | <a href="https://engsv.com/recertification">engsv.com</a>
                 </p>
-                <p class="company-motto">Committed engineering. Seamless compliance.</p>
+                <p class="motto">Committed engineering. Seamless compliance.</p>
             </div>
         </div>
         <div class="footer">
-            <p>© 2026 Engineering Services, Inc. All rights reserved.</p>
+            <p>&copy; 2026 Engineering Services, Inc. All rights reserved.</p>
         </div>
     </div>
 </body>

@@ -5,7 +5,6 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 from pathlib import Path
 from threading import Thread
-import time
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -13,19 +12,17 @@ from src.reader import leer_archivo_datos, validar_datos
 from src.auth import (
     obtener_config, guardar_credenciales, esta_configurado,
     agregar_cuenta, lista_cuentas, seleccionar_cuenta,
-    obtener_cuenta_activa, obtener_cuenta_por_nombre
+    obtener_cuenta_activa, obtener_cuenta_por_nombre, eliminar_cuenta
 )
 from src.templates import listar_templates, obtener_template, obtener_subject_template
 from src.gmail_draft import GmailBorrador
 
 
 class EmailMasivoApp:
-    """Aplicación de escritorio para crear borradores de email."""
-    
     def __init__(self, root):
         self.root = root
-        self.root.title("Email Masivo - Creador de Borradores")
-        self.root.geometry("700x680")
+        self.root.title("Email Masivo - Enviador de Emails")
+        self.root.geometry("750x680")
         self.root.resizable(False, False)
         
         self.datos = None
@@ -41,69 +38,85 @@ class EmailMasivoApp:
         self.cargar_config()
     
     def crear_interfaz(self):
-        """Crea la interfaz gráfica."""
-        title = tk.Label(self.root, text="Email Masivo - Creador de Borradores", 
+        title = tk.Label(self.root, text="Email Masivo - Enviador de Emails", 
                       font=("Arial", 16, "bold"), fg=self.color_primary)
         title.pack(pady=10)
         
-        # ======================
-        # Sección 1: Cuentas
-        # ======================
+        # Cuenta Gmail
         cuenta_frame = tk.LabelFrame(self.root, text="1. Cuenta Gmail", 
                              font=("Arial", 11, "bold"), padx=10, pady=10)
         cuenta_frame.pack(fill="x", padx=10, pady=5)
         
-        # Dropdown para seleccionar cuenta
-        self.combo_cuentas = ttk.Combobox(cuenta_frame, width=20, state="readonly")
+        # Cuenta Gmail - Primera fila
+        cuenta_top = tk.Frame(cuenta_frame)
+        cuenta_top.pack(fill="x", pady=2)
+        
+        self.combo_cuentas = ttk.Combobox(cuenta_top, width=18, state="readonly")
         self.combo_cuentas.pack(side="left", padx=5)
         
-        btn_seleccionar = tk.Button(cuenta_frame, text="Usar", 
+        btn_usar = tk.Button(cuenta_top, text="Usar", 
                            command=self.seleccionar_cuenta_usar,
-                           bg=self.color_primary, fg="white")
-        btn_seleccionar.pack(side="left", padx=5)
+                           bg=self.color_primary, fg="white", width=8)
+        btn_usar.pack(side="left", padx=3)
         
-        # Nombre de cuenta nueva
-        tk.Label(cuenta_frame, text=" Nueva:").pack(side="left", padx=(20,0))
-        self.entry_nombre_cuenta = tk.Entry(cuenta_frame, width=15)
-        self.entry_nombre_cuenta.pack(side="left", padx=5)
+        btn_eliminar = tk.Button(cuenta_top, text="🗑 Eliminar", 
+                          command=self.eliminar_cuenta,
+                          bg=self.color_danger, fg="white", width=12)
+        btn_eliminar.pack(side="left", padx=3)
         
-        tk.Label(cuenta_frame, text="Email:").pack(side="left", padx=(10,0))
-        self.entry_email = tk.Entry(cuenta_frame, width=18)
-        self.entry_email.pack(side="left", padx=5)
+# Cuenta Gmail - Segunda fila
+        cuenta_bot = tk.Frame(cuenta_frame)
+        cuenta_bot.pack(fill="x", pady=2)
         
-        tk.Label(cuenta_frame, text="Password:").pack(side="left")
-        self.entry_password = tk.Entry(cuenta_frame, width=12, show="*")
-        self.entry_password.pack(side="left", padx=5)
+        tk.Label(cuenta_bot, text="Nombre:").pack(side="left")
+        self.entry_nombre_cuenta = tk.Entry(cuenta_bot, width=12)
+        self.entry_nombre_cuenta.pack(side="left", padx=3)
         
-        btn_agregar = tk.Button(cuenta_frame, text="+ Agregar", 
-                          command=self.agregar_cuenta,
-                          bg=self.color_success, fg="white")
+        tk.Label(cuenta_bot, text="Email:").pack(side="left", padx=3)
+        self.entry_email = tk.Entry(cuenta_bot, width=18)
+        self.entry_email.pack(side="left", padx=3)
+        
+        tk.Label(cuenta_bot, text="Pass:").pack(side="left", padx=3)
+        self.entry_password = tk.Entry(cuenta_bot, width=10, show="*")
+        self.entry_password.pack(side="left", padx=3)
+        
+        # Cuenta Gmail - Tercera fila para Remitente
+        cuenta_remitente = tk.Frame(cuenta_frame)
+        cuenta_remitente.pack(fill="x", pady=2)
+        
+        tk.Label(cuenta_remitente, text="Remitente:").pack(side="left")
+        self.entry_sender_name = tk.Entry(cuenta_remitente, width=25)
+        self.entry_sender_name.pack(side="left", padx=3)
+        tk.Label(cuenta_remitente, text="(como sale en email)", fg="gray", font=("Arial", 8)).pack(side="left")
+        
+        btn_agregar = tk.Button(cuenta_bot, text="+ Agregar", 
+                           command=self.agregar_cuenta,
+                           bg=self.color_success, fg="white", width=10)
         btn_agregar.pack(side="left", padx=5)
         
-        # ======================
-        # Sección 2: Cargar Datos
-        # ======================
+        # Datos
         datos_frame = tk.LabelFrame(self.root, text="2. Cargar Archivo de Datos", 
                              font=("Arial", 11, "bold"), padx=10, pady=10)
         datos_frame.pack(fill="x", padx=10, pady=5)
         
-        btn_cargar = tk.Button(datos_frame, text="Cargar XLSX/CSV", 
+        btn_cargar = tk.Button(datos_frame, text="📁 Cargar XLSX/CSV", 
                          command=self.cargar_datos,
-                         bg=self.color_success, fg="white", width=15)
+                         bg=self.color_success, fg="white", width=18)
         btn_cargar.pack(side="left")
         
         self.lbl_datos = tk.Label(datos_frame, text="Sin archivo", fg="gray")
         self.lbl_datos.pack(side="left", padx=10)
         
-        # ======================
-        # Sección 3: Seleccionar Template
-        # ======================
+        # Template
         template_frame = tk.LabelFrame(self.root, text="3. Seleccionar Template", 
                                            font=("Arial", 11, "bold"), padx=10, pady=10)
         template_frame.pack(fill="x", padx=10, pady=5)
         
+        from src.templates import listar_templates
+        templates = listar_templates()
+        
         self.combo_template = ttk.Combobox(template_frame, 
-                                       values=listar_templates(), 
+                                       values=templates, 
                                        width=20, state="readonly")
         self.combo_template.pack(side="left", padx=5)
         self.combo_template.bind("<<ComboboxSelected>>", self.seleccionar_template)
@@ -112,27 +125,23 @@ class EmailMasivoApp:
                           command=self.ver_preview)
         btn_preview.pack(side="left", padx=5)
         
-        # Mostrar subject automático
         self.lbl_subject = tk.Label(template_frame, text="", fg="gray", font=("Arial", 9))
         self.lbl_subject.pack(side="left", padx=10)
         
-        # ======================
-        # Sección 4: Adjunto (Template 3)
-        # ======================
-        adj_frame = tk.LabelFrame(self.root, text="4. Adjunto (solo Template 3)", 
+# Adjunto
+        adj_frame = tk.LabelFrame(self.root, text="4. Adjuntar Archivo", 
                                            font=("Arial", 11, "bold"), padx=10, pady=10)
         adj_frame.pack(fill="x", padx=10, pady=5)
         
-        btn_adj = tk.Button(adj_frame, text="Seleccionar PDF", 
-                         command=self.seleccionar_adjunto)
-        btn_adj.pack(side="left")
+        btn_adj = tk.Button(adj_frame, text="📎 Seleccionar PDF", 
+                          command=self.seleccionar_adjunto,
+                          bg="#3498db", fg="white", width=18)
+        btn_adj.pack(side="left", padx=5)
         
-        self.lbl_adj = tk.Label(adj_frame, text="Ninguno", fg="gray")
+        self.lbl_adj = tk.Label(adj_frame, text="Ninguno", fg="gray", font=("Arial", 10))
         self.lbl_adj.pack(side="left", padx=10)
         
-        # ======================
-        # Sección 5: Resumen
-        # ======================
+        # Resumen
         resumen_frame = tk.LabelFrame(self.root, text="5. Resumen", 
                                            font=("Arial", 11, "bold"), padx=10, pady=10)
         resumen_frame.pack(fill="x", padx=10, pady=5)
@@ -141,18 +150,14 @@ class EmailMasivoApp:
                                 font=("Arial", 10), fg="gray")
         self.lbl_resumen.pack()
         
-        # ======================
-        # Botón Crear Borradores
-        # ======================
-        self.btn_crear = tk.Button(self.root, text="CREAR BORRADORES", 
-                              command=self.crear_borradores,
+        # Botón enviar
+        self.btn_enviar = tk.Button(self.root, text="ENVIAR EMAILS", 
+                              command=self.enviar_emails,
                               bg=self.color_danger, fg="white", 
                               font=("Arial", 12, "bold"), height=2)
-        self.btn_crear.pack(fill="x", padx=10, pady=10)
+        self.btn_enviar.pack(fill="x", padx=10, pady=10)
         
-        # ======================
         # Log
-        # ======================
         log_frame = tk.LabelFrame(self.root, text="Log", 
                                            font=("Arial", 11, "bold"), padx=10, pady=5)
         log_frame.pack(fill="both", expand=True, padx=10, pady=5)
@@ -160,7 +165,6 @@ class EmailMasivoApp:
         self.log_text = scrolledtext.ScrolledText(log_frame, height=10, font=("Courier", 9))
         self.log_text.pack(fill="both", expand=True)
         
-        # Función log para mostrar mensajes
         def log_msg(msg):
             self.log_text.insert("end", msg + "\n")
             self.log_text.see("end")
@@ -169,7 +173,6 @@ class EmailMasivoApp:
         self.log = log_msg
     
     def cargar_config(self):
-        """Carga la configuración guardada."""
         cuentas = lista_cuentas()
         if cuentas:
             self.combo_cuentas['values'] = cuentas
@@ -178,23 +181,25 @@ class EmailMasivoApp:
             cuenta = obtener_cuenta_activa()
             if cuenta:
                 self.entry_email.insert(0, cuenta.get('email', ''))
+                self.entry_sender_name.insert(0, cuenta.get('sender_name', ''))
                 self.log(f"✓ Cuenta cargada: {cuenta.get('nombre')}")
     
     def agregar_cuenta(self):
-        """Agrega una nueva cuenta."""
         nombre = self.entry_nombre_cuenta.get().strip()
         email = self.entry_email.get().strip()
         password = self.entry_password.get().strip()
+        sender_name = self.entry_sender_name.get().strip()
         
         if not nombre or not email or not password:
             messagebox.showwarning("Falta", "Ingrese nombre, email y password")
             return
         
-        agregar_cuenta(nombre, email, password)
+        agregar_cuenta(nombre, email, password, sender_name)
         
         self.entry_nombre_cuenta.delete(0, tk.END)
         self.entry_email.delete(0, tk.END)
         self.entry_password.delete(0, tk.END)
+        self.entry_sender_name.delete(0, tk.END)
         
         cuentas = lista_cuentas()
         self.combo_cuentas['values'] = cuentas
@@ -203,7 +208,6 @@ class EmailMasivoApp:
         self.log(f"✓ Cuenta guardada: {nombre}")
     
     def seleccionar_cuenta_usar(self):
-        """Selecciona una cuenta para usar."""
         nombre = self.combo_cuentas.get()
         if not nombre:
             return
@@ -213,10 +217,34 @@ class EmailMasivoApp:
             seleccionar_cuenta(nombre)
             self.entry_email.delete(0, tk.END)
             self.entry_email.insert(0, cuenta.get('email', ''))
+            self.entry_sender_name.delete(0, tk.END)
+            self.entry_sender_name.insert(0, cuenta.get('sender_name', ''))
             self.log(f"✓ Cuenta seleccionada: {nombre}")
     
+    def eliminar_cuenta(self):
+        nombre = self.combo_cuentas.get()
+        if not nombre:
+            messagebox.showwarning("Falta", "Seleccione una cuenta del dropdown")
+            return
+        
+        confirmar = messagebox.askyesno("Eliminar", f"¿Eliminar la cuenta '{nombre}'?")
+        if not confirmar:
+            return
+        
+        eliminar_cuenta(nombre)
+        self.entry_email.delete(0, tk.END)
+        self.entry_nombre_cuenta.delete(0, tk.END)
+        self.entry_sender_name.delete(0, tk.END)
+        
+        cuentas = lista_cuentas()
+        self.combo_cuentas['values'] = cuentas
+        if cuentas:
+            self.combo_cuentas.current(0)
+        
+        messagebox.showinfo("Eliminado", f"Cuenta '{nombre}' eliminada")
+        self.log(f"✓ Cuenta eliminada: {nombre}")
+    
     def cargar_datos(self):
-        """Carga el archivo de datos."""
         archivo = filedialog.askopenfilename(
             title="Seleccionar archivo",
             filetypes=[("Excel", "*.xlsx *.xls"), ("CSV", "*.csv")]
@@ -240,11 +268,9 @@ class EmailMasivoApp:
                 messagebox.showerror("Error", str(e))
     
     def seleccionar_template(self, event=None):
-        """Selecciona un template."""
         self.template_seleccionado = self.combo_template.get()
         
         if self.template_seleccionado and self.datos:
-            # Obtener el primer address para el subject
             address = self.datos[0].get('address', '')
             subject_auto = obtener_subject_template(self.template_seleccionado, address)
             self.lbl_subject.config(text=f"Subject: {subject_auto}", fg=self.color_primary)
@@ -254,7 +280,6 @@ class EmailMasivoApp:
             self.actualizar_resumen()
     
     def ver_preview(self):
-        """Muestra preview del template."""
         if not self.template_seleccionado:
             messagebox.showwarning("Warning", "Seleccione un template")
             return
@@ -268,22 +293,59 @@ class EmailMasivoApp:
             }
             
             from src.templates import aplicar_variables
-            preview = aplicar_variables(template, ejemplo)
+            preview_html = aplicar_variables(template, ejemplo)
+            
+            cuenta = obtener_cuenta_activa()
+            sender = cuenta.get('sender_name', cuenta.get('email', 'genesis@engsv.com')) if cuenta else 'genesis@engsv.com'
+            subject = obtener_subject_template(self.template_seleccionado, ejemplo['Property Address'])
             
             win = tk.Toplevel(self.root)
-            win.title("Preview")
-            win.geometry("600x500")
+            win.title("Preview - " + self.template_seleccionado)
+            win.geometry("650x500")
             
-            text = scrolledtext.ScrolledText(win, wrap=tk.WORD)
+            info_frame = tk.Frame(win, bg="#e8e8e8", pady=8, padx=10)
+            info_frame.pack(fill="x")
+            
+            row1 = tk.Frame(info_frame, bg="#e8e8e8")
+            row1.pack(fill="x", pady=2)
+            tk.Label(row1, text="De:", font=("Arial", 9, "bold"), bg="#e8e8e8", fg="#333").pack(side="left")
+            tk.Label(row1, text=sender, font=("Arial", 9), bg="#e8e8e8", fg="#0066cc").pack(side="left", padx=5)
+            
+            row2 = tk.Frame(info_frame, bg="#e8e8e8")
+            row2.pack(fill="x", pady=2)
+            tk.Label(row2, text="Para:", font=("Arial", 9, "bold"), bg="#e8e8e8", fg="#333").pack(side="left")
+            tk.Label(row2, text="cliente@email.com", font=("Arial", 9), bg="#e8e8e8").pack(side="left", padx=5)
+            
+            row3 = tk.Frame(info_frame, bg="#e8e8e8")
+            row3.pack(fill="x", pady=2)
+            tk.Label(row3, text="Asunto:", font=("Arial", 9, "bold"), bg="#e8e8e8", fg="#333").pack(side="left")
+            tk.Label(row3, text=subject, font=("Arial", 9), bg="#e8e8e8").pack(side="left", padx=5)
+            
+            separator = tk.Frame(win, height=1, bg="#cccccc")
+            separator.pack(fill="x", padx=10)
+            
+            btn_frame = tk.Frame(win, pady=10)
+            btn_frame.pack()
+            tk.Button(btn_frame, text="Abrir en Navegador (Verdadero)", 
+                     command=lambda: self.abrir_en_navegador(preview_html),
+                     bg="#2196F3", fg="white", font=("Arial", 10)).pack()
+            
+            text = scrolledtext.ScrolledText(win, wrap=tk.WORD, font=("Consolas", 9))
             text.pack(fill="both", expand=True, padx=10, pady=10)
-            text.insert(1.0, preview)
+            text.insert(1.0, preview_html)
             text.config(state="disabled")
             
         except Exception as e:
             messagebox.showerror("Error", str(e))
     
+    def abrir_en_navegador(self, html):
+        import tempfile
+        import webbrowser
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as f:
+            f.write(html)
+            webbrowser.open(f.name)
+    
     def seleccionar_adjunto(self):
-        """Selecciona archivo adjunto."""
         archivo = filedialog.askopenfilename(
             title="Seleccionar adjunto",
             filetypes=[("PDF", "*.pdf"), ("Todos", "*.*")]
@@ -295,10 +357,8 @@ class EmailMasivoApp:
             self.log(f"✓ Adjunto: {os.path.basename(archivo)}")
     
     def actualizar_resumen(self):
-        """Actualiza el resumen."""
-        cuenta = self.combo_cuentas.get()
-        
         if self.datos and self.stats and self.template_seleccionado:
+            cuenta = self.combo_cuentas.get()
             adj = os.path.basename(self.adjunto) if self.adjunto else "Ningún"
             self.lbl_resumen.config(
                 text=f"📧 {self.stats['total']} | 📧 {self.template_seleccionado} | 📎 {adj}",
@@ -312,16 +372,9 @@ class EmailMasivoApp:
         else:
             self.lbl_resumen.config(text="Sin datos", fg="gray")
     
-    def log(self, msg):
-        """Agrega al log."""
-        self.log_text.insert("end", msg + "\n")
-        self.log_text.see("end")
-        self.root.update()
-    
-    def crear_borradores(self):
-        """Crea los borradores."""
+    def enviar_emails(self):
         if not self.datos:
-            messagebox.showwarning("Warning", "Carge un archivo de datos")
+            messagebox.showwarning("Warning", "Cargue un archivo de datos")
             return
         
         if not self.template_seleccionado:
@@ -334,8 +387,7 @@ class EmailMasivoApp:
             return
         
         cantidad = len(self.datos)
-        confirmar = messagebox.askyesno("Confirmar", f"¿Crear {cantidad} borradores?")
-        
+        confirmar = messagebox.askyesno("Confirmar", f"¿Enviar {cantidad} emails?")
         if not confirmar:
             return
         
@@ -345,27 +397,27 @@ class EmailMasivoApp:
             messagebox.showerror("Error", f"Template: {e}")
             return
         
-        adjunto = None
-        if self.template_seleccionado == 'template3.html' and self.adjunto:
-            adjunto = self.adjunto
+        adjunto = self.adjunto if self.adjunto else None
         
-        # Obtener subject automático
         subject = obtener_subject_template(self.template_seleccionado, self.datos[0].get('address', ''))
         
-        self.btn_crear.config(state="disabled")
+        self.btn_enviar.config(state="disabled")
         self.log("=" * 40)
-        self.log(f"Creando {cantidad} borradores...")
+        self.log(f"Enviando {cantidad} emails...")
         
         Gmail = GmailBorrador(cuenta['email'], cuenta['app_password'])
         
         def proceso():
             try:
+                sender_name = cuenta.get('sender_name', '')
+                
                 stats = Gmail.crear_borradores(
                     datos=self.datos,
                     template=template,
                     subject=subject,
                     adjunto=adjunto,
-                    callback=self.log
+                    callback=self.log,
+                    sender_name=sender_name
                 )
                 
                 self.root.after(0, lambda: messagebox.showinfo(
@@ -376,7 +428,7 @@ class EmailMasivoApp:
             except Exception as e:
                 self.root.after(0, lambda: messagebox.showerror("Error", str(e)))
             
-            self.root.after(0, lambda: self.btn_crear.config(state="normal"))
+            self.root.after(0, lambda: self.btn_enviar.config(state="normal"))
         
         Thread(target=proceso, daemon=True).start()
 
