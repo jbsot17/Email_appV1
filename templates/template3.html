@@ -3,83 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Final Notice - Recertification</title>
+    <title>Recertification Inquiry</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: rgb(0,0,0); background: rgb(255,255,255); margin: 0; padding: 40px 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: rgb(255,255,255); border: 1px solid rgb(228,85,85); border-radius: 8px; }
-        .header { background: rgb(238,27,41); color: rgb(255,255,255); padding: 30px; text-align: center; border-radius: 7px 7px 0 0; }
-        .header h1 { margin: 0; font-size: 22px; font-weight: 600; }
-        .header .tag { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 11px; }
-        .content { padding: 30px; }
-        .greeting { font-size: 15px; margin-bottom: 20px; }
-        .message { font-size: 14px; margin-bottom: 15px; }
-        .alert { background: rgb(255,255,255); border: 2px solid rgb(238,27,41); border-radius: 6px; padding: 20px; margin: 20px 0; text-align: center; }
-        .alert-icon { font-size: 28px; margin-bottom: 10px; }
-        .alert-title { font-weight: bold; font-size: 16px; color: rgb(238,27,41); margin-bottom: 8px; }
-        .alert-text { font-size: 14px; }
-        .property-box { border: 1px solid rgb(228,85,85); border-radius: 6px; padding: 15px; margin: 15px 0; background: rgb(255,255,255); }
-        .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgb(228,85,85); }
-        .row:last-child { border: none; }
-        .label { color: rgb(238,27,41); font-weight: bold; font-size: 12px; }
-        .value { font-size: 14px; }
-        .cta { text-align: center; padding: 20px; background: rgb(255,255,255); border-radius: 6px; margin-top: 20px; }
-        .cta a { display: inline-block; background: rgb(238,27,41); color: rgb(255,255,255); padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; }
-        .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid rgb(228,85,85); }
-        .signature .name { font-weight: bold; font-size: 15px; color: rgb(0,0,0); }
-        .signature .title { font-size: 13px; color: rgb(100,100,100); margin-bottom: 8px; }
-        .signature .contact { font-size: 13px; }
-        .signature .contact a { color: rgb(238,27,41); text-decoration: none; }
-        .signature .company { color: rgb(238,27,41); font-weight: bold; font-size: 14px; }
-        .signature .motto { font-size: 11px; color: rgb(150,150,150); font-style: italic; margin-top: 8px; }
-        .footer { background: rgb(248,248,248); padding: 15px; text-align: center; font-size: 11px; color: rgb(150,150,150); border-radius: 0 0 7px 7px; }
+        body { font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 20px; }
+        .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px 40px; }
+        .greeting { font-size: 16px; margin-bottom: 18px; }
+        .message { font-size: 15px; margin-bottom: 15px; }
+        .highlight { background: #f9f9f9; padding: 15px; margin: 20px 0; }
+        .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid #dddddd; }
+        .signature .name { font-weight: bold; font-size: 15px; color: #333333; }
+        .signature .title { font-size: 13px; color: #666666; margin-bottom: 8px; }
+        .signature .contact { font-size: 13px; color: #333333; }
+        .signature .contact a { color: #00aaff; text-decoration: none; }
+        .signature .company { color: #dc000d; font-weight: bold; font-size: 14px; }
+        .signature .motto { font-size: 11px; color: #888888; font-style: italic; margin-top: 8px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Final Notice</h1>
-            <span class="tag">EMAIL 3 - Day 14</span>
-        </div>
-        <div class="content">
-            <p class="greeting">Hi,</p>
-            <p class="message">Quick note on {{Property Address}} (Folio {{Folio Number}}). Time is running short on this one.</p>
-            
-            <div class="alert">
-                <div class="alert-icon">⚠️</div>
-                <div class="alert-title">FINAL REMINDER</div>
-                <div class="alert-text">Properties requiring recertification under Section 8-11(f) don't wait. Let's get this done before the deadline.</div>
-            </div>
-            
-            <div class="property-box">
-                <div class="row">
-                    <span class="label">PROPERTY ADDRESS</span>
-                    <span class="value">{{Property Address}}</span>
-                </div>
-                <div class="row">
-                    <span class="label">FOLIO NUMBER</span>
-                    <span class="value">{{Folio Number}}</span>
-                </div>
-            </div>
-            
-            <p class="message">We can typically complete all required inspections within 48 hours. Don't risk violations.</p>
-            
-            <div class="cta">
-                <a href="mailto:gt@engsv.com">Schedule Now</a>
-            </div>
-            
-            <div class="signature">
-                <p class="name">Genesis Torrealba</p>
-                <p class="title">Sales & Operations Coordinator</p>
-                <p class="contact">
-                    <a href="mailto:gt@engsv.com">gt@engsv.com</a> | <strong>Direct:</strong> 954-951-1482<br>
-                    <span class="company">Engineering Services, Inc.</span><br>
-                    Office: 954-951-2121 | <a href="https://engsv.com/recertification">engsv.com</a>
-                </p>
-                <p class="motto">Committed engineering. Seamless compliance.</p>
-            </div>
-        </div>
-        <div class="footer">
-            <p>&copy; 2026 Engineering Services, Inc. All rights reserved.</p>
+    <div class="email-container">
+        <p class="greeting">Hi,</p>
+        
+        <p class="message">Something a lot of property owners don't know going in:</p>
+        
+        <p class="message">Building recertification in South Florida requires four separate inspections: structural, electrical, thermographic infrared (IR), and nighttime parking lot illumination. Most firms only handle one or two, which means hiring multiple consultants, coordinating separate timelines, and submitting reports that all have to align before the city approves anything.</p>
+        
+        <p class="message">When those reports come from different firms or they don't align, the city flags it, and the owner deals with the fallout.</p>
+        
+        <p class="message">We handle all four under one roof (one team, one submission, one point of contact from the first inspection through final city sign-off).</p>
+        
+        <p class="message">Worth a conversation?</p>
+        
+        <p class="message">P.S. If it's helpful, here's a brief overview of what we do at ESi:</p>
+        
+        <p class="message">Best,</p>
+        
+        <div class="signature">
+            <p class="name">Genesis Torrealba</p>
+            <p class="title">Sales & Operations Coordinator</p>
+            <p class="contact">
+                <a href="mailto:gt@engsv.com">gt@engsv.com</a> | <strong>Direct:</strong> 954-951-1482<br>
+                <span class="company">Engineering Services, Inc.</span><br>
+                Office: 954-951-2121 | <a href="https://engsv.com/recertification">engsv.com</a>
+            </p>
+            <p class="motto">Committed engineering. Seamless compliance.</p>
         </div>
     </div>
 </body>

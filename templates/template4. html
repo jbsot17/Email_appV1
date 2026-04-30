@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device- width, initial-scale=1.0">
+    <title>Recertification Inquiry</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans- serif; line-height: 1.6; color: #33 33 33; margin: 0; padding: 20px; }
+        .email- container { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px 40px; }
+        .greeting { font-size: 16px; margin-bottom: 18px; }
+        .message { font-size: 15px; margin-bottom: 15px; }
+        .highlight { background: #f9 f9 f9; padding: 15px; margin: 20px 0; }
+        .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid #dd dddd; }
+        .signature .name { font- weight: bold; font-size: 15px; color: #33 33 33; }
+        .signature .title { font-size: 13px; color: #66 66 66; margin-bottom: 8px; }
+        .signature .contact { font-size: 13px; color: #33 33 33; }
+        .signature .contact a { color: #00 aaff; text- decoration: none; }
+        .signature .company { color: #dc 000 d; font- weight: bold; font-size: 14px; }
+        .signature .motto { font-size: 11px; color: #88 88 88; font-style: italic; margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <p class="greeting">Hi,</p>
+        
+        <p class="message">Here' s something worth knowing.</p>
+        
+        <p class="message">Most engineering firms do the inspection, file the report, and move on. When the city comes back with a deficiency notice (revision requests, re- inspection, additional documentation), the owner is on their own.</p>
+        
+        <p class="message">I' ve seen that scenario play out too many times. What stays with people isn' t just the extra cost. It' s that they were completely alone, navigating a bureaucratic process they didn' t fully understand, while their deadline kept moving closer.</p>
+        
+        <p class="message">We do it differently. We will stay with you through every city submission, every revision request, until you have the certificate in hand. That' s not standard in this industry, but it should be.</p>
+        
+        <p class="message">If you' d like to know what that looks like for {{Property Address}}, just reply.</p>
+        
+        <p class="message">Best,</p>
+        
+        <div class="signature">
+            <p class="name">Genesis Torrealba</p>
+            <p class="title">Sales & Operations Coordinator</p>
+            <p class="contact">
+                <a href="mailto:gt@engsv.com">gt@engsv.com</a> | <strong>Direct:</strong> 954-951-14 82<br>
+                <span class="company">Engineering Services, Inc.</span><br>
+                Office: 954-951-2 121 | <a href="https://engsv.com/recertification">engsv.com</a>
+            </p>
+            <p class="motto">Committed engineering. Seamless compliance.</p>
+        </div>
+    </div>
+</body>
+</html>

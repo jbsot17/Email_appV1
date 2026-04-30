@@ -299,41 +299,12 @@ class EmailMasivoApp:
             sender = cuenta.get('sender_name', cuenta.get('email', 'genesis@engsv.com')) if cuenta else 'genesis@engsv.com'
             subject = obtener_subject_template(self.template_seleccionado, ejemplo['Property Address'])
             
-            win = tk.Toplevel(self.root)
-            win.title("Preview - " + self.template_seleccionado)
-            win.geometry("650x500")
+            import tempfile, webbrowser
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as f:
+                f.write(preview_html)
+                webbrowser.open('file://' + f.name)
             
-            info_frame = tk.Frame(win, bg="#e8e8e8", pady=8, padx=10)
-            info_frame.pack(fill="x")
-            
-            row1 = tk.Frame(info_frame, bg="#e8e8e8")
-            row1.pack(fill="x", pady=2)
-            tk.Label(row1, text="De:", font=("Arial", 9, "bold"), bg="#e8e8e8", fg="#333").pack(side="left")
-            tk.Label(row1, text=sender, font=("Arial", 9), bg="#e8e8e8", fg="#0066cc").pack(side="left", padx=5)
-            
-            row2 = tk.Frame(info_frame, bg="#e8e8e8")
-            row2.pack(fill="x", pady=2)
-            tk.Label(row2, text="Para:", font=("Arial", 9, "bold"), bg="#e8e8e8", fg="#333").pack(side="left")
-            tk.Label(row2, text="cliente@email.com", font=("Arial", 9), bg="#e8e8e8").pack(side="left", padx=5)
-            
-            row3 = tk.Frame(info_frame, bg="#e8e8e8")
-            row3.pack(fill="x", pady=2)
-            tk.Label(row3, text="Asunto:", font=("Arial", 9, "bold"), bg="#e8e8e8", fg="#333").pack(side="left")
-            tk.Label(row3, text=subject, font=("Arial", 9), bg="#e8e8e8").pack(side="left", padx=5)
-            
-            separator = tk.Frame(win, height=1, bg="#cccccc")
-            separator.pack(fill="x", padx=10)
-            
-            btn_frame = tk.Frame(win, pady=10)
-            btn_frame.pack()
-            tk.Button(btn_frame, text="Abrir en Navegador (Verdadero)", 
-                     command=lambda: self.abrir_en_navegador(preview_html),
-                     bg="#2196F3", fg="white", font=("Arial", 10)).pack()
-            
-            text = scrolledtext.ScrolledText(win, wrap=tk.WORD, font=("Consolas", 9))
-            text.pack(fill="both", expand=True, padx=10, pady=10)
-            text.insert(1.0, preview_html)
-            text.config(state="disabled")
+            self.log(f"Preview abierta en navegador")
             
         except Exception as e:
             messagebox.showerror("Error", str(e))
