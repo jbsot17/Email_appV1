@@ -1,4 +1,4 @@
-"""Email Masivo Sender - CustomTkinter Interface"""
+"""ESIMO - ESI MailOps"""
 import os
 import sys
 import tkinter as tk
@@ -21,109 +21,163 @@ from src.templates import listar_templates, obtener_template, obtener_subject_te
 from src.gmail_draft import GmailBorrador
 
 
-class EmailMasivoApp:
+class ESIMOApp:
     def __init__(self):
         self.root = ctk.CTk()
-        self.root.title("Email Masivo - Enviador")
-        self.root.geometry("800x750")
+        self.root.title("ESIMO - ESI MailOps")
+        self.root.geometry("950x680")
+        self.root.minsize(850, 620)
         
-        self.color_primary = "#3B8ED0"
+        self.color_company = "#DC000D"
         self.color_success = "#2CC985"
         self.color_danger = "#FF5C5C"
+        self.color_warning = "#F59E0B"
         
         self.datos = None
         self.stats = None
         self.template_seleccionado = None
         self.adjunto = None
-        self.log_text = None
         self.log = lambda m: None
         
         self.crear_interfaz()
 
     def crear_interfaz(self):
-        ctk.CTkLabel(self.root, text="Email Masivo", font=("Roboto", 28, "bold")).pack(pady=15)
-        ctk.CTkLabel(self.root, text="Enviador de Emails", font=("Roboto", 14)).pack()
+        self.root.grid_rowconfigure(5, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
         
-        # Cuenta
+        # === HEADER ===
+        header = ctk.CTkFrame(self.root, fg_color=self.color_company, height=75)
+        header.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
+        header.grid_propagate(False)
+        ctk.CTkLabel(header, text="ESIMO", font=("Roboto", 34, "bold"), text_color="white").pack(pady=(8, 0))
+        ctk.CTkLabel(header, text="ESI MailOps", font=("Roboto", 12), text_color="white").pack(pady=(0, 8))
+        
+        # === 1. CUENTA GMAIL (row 1) ===
         f1 = ctk.CTkFrame(self.root)
-        f1.pack(fill="x", padx=20, pady=5)
-        ctk.CTkLabel(f1, text="1. Cuenta Gmail", font=("Roboto", 16, "bold")).pack(anchor="w", padx=10, pady=8)
+        f1.grid(row=1, column=0, sticky="ew", padx=15, pady=(8, 4))
         
-        self.combo_cuentas = ctk.CTkComboBox(f1, values=lista_cuentas(), width=220)
-        self.combo_cuentas.pack(padx=10, pady=5)
+        ctk.CTkLabel(f1, text="1. Cuenta Gmail", font=("Roboto", 14, "bold")).pack(anchor="w", padx=10, pady=(5, 2))
         
-        f1a = ctk.CTkFrame(f1, fg_color="transparent")
-        f1a.pack()
-        ctk.CTkButton(f1a, text="Usar", command=self.seleccionar_cuenta_usar, width=80).pack(side="left", padx=2)
-        ctk.CTkButton(f1a, text="Eliminar", command=self.eliminar_cuenta, fg_color=self.color_danger, width=80).pack(side="left", padx=2)
+        top_row = ctk.CTkFrame(f1, fg_color="transparent")
+        top_row.pack(fill="x", padx=10, pady=(0, 3))
         
-        f1b = ctk.CTkFrame(f1, fg_color="transparent")
-        f1b.pack(fill="x", padx=10, pady=5)
-        ctk.CTkLabel(f1b, text="Nombre:").pack(side="left")
-        self.entry_nombre = ctk.CTkEntry(f1b, width=100)
-        self.entry_nombre.pack(side="left", padx=5)
-        ctk.CTkLabel(f1b, text="Email:").pack(side="left", padx=5)
-        self.entry_email = ctk.CTkEntry(f1b, width=150)
-        self.entry_email.pack(side="left", padx=5)
-        ctk.CTkLabel(f1b, text="Pass:").pack(side="left", padx=5)
-        self.entry_password = ctk.CTkEntry(f1b, width=100, show="*")
-        self.entry_password.pack(side="left", padx=5)
-        ctk.CTkButton(f1b, text="+ Agregar", command=self.agregar_cuenta, fg_color=self.color_success).pack(side="left", padx=5)
+        self.combo_cuentas = ctk.CTkComboBox(top_row, values=lista_cuentas(), width=200)
+        self.combo_cuentas.pack(side="left", padx=(0, 5))
         
-        f1c = ctk.CTkFrame(f1, fg_color="transparent")
-        f1c.pack(fill="x", padx=10, pady=5)
-        ctk.CTkLabel(f1c, text="Remitente:").pack(side="left")
-        self.entry_sender = ctk.CTkEntry(f1c, width=200)
-        self.entry_sender.pack(side="left", padx=5)
+        ctk.CTkButton(top_row, text="Usar", command=self.seleccionar_cuenta_usar, width=60).pack(side="left", padx=2)
+        ctk.CTkButton(top_row, text="Eliminar", command=self.eliminar_cuenta, fg_color=self.color_danger, width=70).pack(side="left", padx=2)
         
-        # Archivo
-        f2 = ctk.CTkFrame(self.root)
-        f2.pack(fill="x", padx=20, pady=5)
-        ctk.CTkLabel(f2, text="2. Archivo", font=("Roboto", 16, "bold")).pack(anchor="w", padx=10, pady=8)
-        ctk.CTkButton(f2, text="Cargar XLSX/CSV", command=self.cargar_datos, fg_color=self.color_success).pack(anchor="w", padx=10)
-        self.lbl_datos = ctk.CTkLabel(f2, text="Sin archivo")
-        self.lbl_datos.pack(anchor="w", padx=10, pady=5)
+        fields_row = ctk.CTkFrame(f1, fg_color="transparent")
+        fields_row.pack(fill="x", padx=10, pady=(0, 3))
         
-        # Template
-        f3 = ctk.CTkFrame(self.root)
-        f3.pack(fill="x", padx=20, pady=5)
-        ctk.CTkLabel(f3, text="3. Template", font=("Roboto", 16, "bold")).pack(anchor="w", padx=10, pady=8)
+        ctk.CTkLabel(fields_row, text="Nombre:", font=("Roboto", 11)).pack(side="left")
+        self.entry_nombre = ctk.CTkEntry(fields_row, width=90, font=("Roboto", 11))
+        self.entry_nombre.pack(side="left", padx=3)
+        
+        ctk.CTkLabel(fields_row, text="Email:", font=("Roboto", 11)).pack(side="left", padx=(10, 0))
+        self.entry_email = ctk.CTkEntry(fields_row, width=140, font=("Roboto", 11))
+        self.entry_email.pack(side="left", padx=3)
+        
+        ctk.CTkLabel(fields_row, text="Pass:", font=("Roboto", 11)).pack(side="left", padx=(10, 0))
+        self.entry_password = ctk.CTkEntry(fields_row, width=90, show="*", font=("Roboto", 11))
+        self.entry_password.pack(side="left", padx=3)
+        
+        ctk.CTkButton(fields_row, text="+ Agregar", command=self.agregar_cuenta, fg_color=self.color_success, width=80).pack(side="left", padx=(10, 0))
+        
+        sender_row = ctk.CTkFrame(f1, fg_color="transparent")
+        sender_row.pack(fill="x", padx=10, pady=(0, 6))
+        
+        ctk.CTkLabel(sender_row, text="Remitente:", font=("Roboto", 11)).pack(side="left")
+        self.entry_sender = ctk.CTkEntry(sender_row, width=180, font=("Roboto", 11))
+        self.entry_sender.pack(side="left", padx=3)
+        
+        # === ROW 2: 2. Archivo | 3. Template ===
+        row2 = ctk.CTkFrame(self.root)
+        row2.grid(row=2, column=0, sticky="ew", padx=15, pady=4)
+        row2.grid_columnconfigure(0, weight=1)
+        row2.grid_columnconfigure(1, weight=1)
+        
+        # 2. Archivo (izquierda)
+        f2 = ctk.CTkFrame(row2)
+        f2.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+        ctk.CTkLabel(f2, text="2. Archivo de Datos", font=("Roboto", 13, "bold")).pack(anchor="w", padx=10, pady=(5, 2))
+        ctk.CTkButton(f2, text="Cargar XLSX/CSV", command=self.cargar_datos, fg_color=self.color_success, width=150).pack(anchor="w", padx=10, pady=(0, 3))
+        self.lbl_datos = ctk.CTkLabel(f2, text="Sin archivo cargado", text_color="gray", font=("Roboto", 10))
+        self.lbl_datos.pack(anchor="w", padx=10, pady=(0, 6))
+        
+        # 3. Template (derecha)
+        f3 = ctk.CTkFrame(row2)
+        f3.grid(row=0, column=1, sticky="ew", padx=(5, 0))
+        ctk.CTkLabel(f3, text="3. Template", font=("Roboto", 13, "bold")).pack(anchor="w", padx=10, pady=(5, 2))
         
         templates = listar_templates()
-        self.combo_template = ctk.CTkComboBox(f3, values=templates, width=280)
-        self.combo_template.pack(anchor="w", padx=10, pady=5)
-        self.combo_template.configure(command=lambda x: self.seleccionar_template())
+        self.combo_template = ctk.CTkComboBox(f3, values=templates, width=180)
+        self.combo_template.pack(anchor="w", padx=10, pady=(0, 3))
+        self.combo_template.configure(command=self.seleccionar_template)
         
-        f3a = ctk.CTkFrame(f3, fg_color="transparent")
-        f3a.pack(anchor="w", padx=10, pady=5)
-        ctk.CTkButton(f3a, text="Ver Preview", command=self.ver_preview).pack(side="left", padx=2)
-        self.lbl_subject = ctk.CTkLabel(f3, text="")
-        self.lbl_subject.pack(anchor="w", padx=10)
+        btn_preview = ctk.CTkFrame(f3, fg_color="transparent")
+        btn_preview.pack(anchor="w", padx=10, pady=(0, 2))
+        ctk.CTkButton(btn_preview, text="Ver Preview", command=self.ver_preview, width=80).pack(side="left", padx=(0, 5))
         
-        # Adjunto
-        f4 = ctk.CTkFrame(self.root)
-        f4.pack(fill="x", padx=20, pady=5)
-        ctk.CTkLabel(f4, text="4. Adjunto", font=("Roboto", 16, "bold")).pack(anchor="w", padx=10, pady=8)
-        ctk.CTkButton(f4, text="Seleccionar PDF", command=self.seleccionar_adjunto).pack(anchor="w", padx=10)
-        self.lbl_adj = ctk.CTkLabel(f4, text="Ninguno")
-        self.lbl_adj.pack(anchor="w", padx=10, pady=5)
+        self.lbl_subject = ctk.CTkLabel(f3, text="", text_color="gray", font=("Roboto", 9))
+        self.lbl_subject.pack(anchor="w", padx=10, pady=(0, 6))
         
-        self.lbl_resumen = ctk.CTkLabel(self.root, text="Sin datos", font=("Roboto", 14))
-        self.lbl_resumen.pack(pady=10)
+        # === ROW 3: 4. Adjunto | ENVIAR FIJO ===
+        row3 = ctk.CTkFrame(self.root)
+        row3.grid(row=3, column=0, sticky="ew", padx=15, pady=4)
+        row3.grid_columnconfigure(0, weight=1)
+        row3.grid_columnconfigure(1, weight=0)
         
-        self.btn_enviar = ctk.CTkButton(self.root, text="ENVIAR EMAILS", command=self.enviar_emails, fg_color=self.color_danger)
-        self.btn_enviar.pack(fill="x", padx=20, pady=15)
+        # 4. Adjunto (izquierda)
+        f4 = ctk.CTkFrame(row3)
+        f4.grid(row=0, column=0, sticky="w", padx=(0, 10))
+        ctk.CTkLabel(f4, text="4. Adjunto", font=("Roboto", 13, "bold")).pack(anchor="w", padx=10, pady=(5, 2))
+        ctk.CTkButton(f4, text="Seleccionar PDF", command=self.seleccionar_adjunto, width=150).pack(anchor="w", padx=10, pady=(0, 3))
+        self.lbl_adj = ctk.CTkLabel(f4, text="Ninguno", text_color="gray", font=("Roboto", 10))
+        self.lbl_adj.pack(anchor="w", padx=10, pady=(0, 6))
         
-        # Log
-        f5 = ctk.CTkFrame(self.root)
-        f5.pack(fill="both", expand=True, padx=20, pady=10)
-        ctk.CTkLabel(f5, text="Log", font=("Roboto", 12, "bold")).pack(anchor="w")
-        self.log_text = ctk.CTkTextbox(f5, height=120)
-        self.log_text.pack(fill="both", expand=True, pady=5)
+        # Boton ENVIAR (derecha, fijo)
+        self.btn_enviar = ctk.CTkButton(
+            row3, 
+            text="ENVIAR EMAILS", 
+            command=self.enviar_emails, 
+            fg_color=self.color_company,
+            hover_color="#A0000B",
+            font=("Roboto", 16, "bold"),
+            height=55,
+            width=180
+        )
+        self.btn_enviar.grid(row=0, column=1, sticky="e", padx=(0, 0), ipady=5)
+        
+        # === ROW 4: Resumen ===
+        f_resumen = ctk.CTkFrame(self.root, fg_color="#f0f0f0")
+        f_resumen.grid(row=4, column=0, sticky="ew", padx=15, pady=4)
+        self.lbl_resumen = ctk.CTkLabel(f_resumen, text="Estado: Sin datos cargados", font=("Roboto", 12), text_color="gray")
+        self.lbl_resumen.pack(padx=10, pady=6)
+        
+        # === ROW 5: Log (expande) ===
+        f_log = ctk.CTkFrame(self.root)
+        f_log.grid(row=5, column=0, sticky="nsew", padx=15, pady=(4, 10))
+        ctk.CTkLabel(f_log, text="Log de actividad", font=("Roboto", 11, "bold")).pack(anchor="w", padx=10, pady=(5, 0))
+        
+        log_scroll = ctk.CTkScrollableFrame(f_log, height=130)
+        log_scroll.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        self.log_text = ctk.CTkTextbox(log_scroll, font=("Consolas", 9))
+        self.log_text.pack(fill="both", expand=True)
         self.log = lambda m: (self.log_text.insert("end", m + "\n"), self.log_text.see("end"))
         
         self.cargar_config()
         self.root.mainloop()
+
+    def actualizar_resumen(self):
+        if self.datos and self.template_seleccionado and self.stats:
+            adj_text = f" | {os.path.basename(self.adjunto)}" if self.adjunto else ""
+            self.lbl_resumen.configure(text=f"Resumen: {self.stats['total']} | {self.template_seleccionado}{adj_text}", text_color=self.color_success)
+        elif self.datos and self.stats:
+            self.lbl_resumen.configure(text=f"Resumen: {self.stats['total']} | Sin template", text_color=self.color_warning)
+        else:
+            self.lbl_resumen.configure(text="Estado: Sin datos cargados", text_color="gray")
 
     def cargar_config(self):
         cuentas = lista_cuentas()
@@ -134,7 +188,7 @@ class EmailMasivoApp:
             if cuenta:
                 self.entry_email.insert(0, cuenta.get('email', ''))
                 self.entry_sender.insert(0, cuenta.get('sender_name', ''))
-                self.log(f"Cuenta: {cuenta.get('nombre')}")
+                self.log(f"[ESIMO] Cuenta: {cuenta.get('nombre')}")
 
     def agregar_cuenta(self):
         nombre = self.entry_nombre.get().strip()
@@ -150,12 +204,11 @@ class EmailMasivoApp:
         self.entry_password.delete(0, tk.END)
         self.entry_sender.delete(0, tk.END)
         self.combo_cuentas.configure(values=lista_cuentas())
-        self.log(f"Cuenta '{nombre}' guardada")
+        self.log(f"[ESIMO] Cuenta '{nombre}' guardada")
 
     def seleccionar_cuenta_usar(self):
         nombre = self.combo_cuentas.get()
-        if not nombre:
-            return
+        if not nombre: return
         cuenta = obtener_cuenta_por_nombre(nombre)
         if cuenta:
             seleccionar_cuenta(nombre)
@@ -163,92 +216,96 @@ class EmailMasivoApp:
             self.entry_email.insert(0, cuenta.get('email', ''))
             self.entry_sender.delete(0, tk.END)
             self.entry_sender.insert(0, cuenta.get('sender_name', ''))
-            self.log(f"Cuenta: {nombre}")
+            self.log(f"[ESIMO] Cuenta: {nombre}")
 
     def eliminar_cuenta(self):
         nombre = self.combo_cuentas.get()
-        if not nombre:
-            return
-        if not messagebox.askyesno("Eliminar", f"¿Eliminar '{nombre}'?"):
-            return
+        if not nombre: return
+        if not messagebox.askyesno("Eliminar", f"¿Eliminar '{nombre}'?"): return
         eliminar_cuenta(nombre)
         self.entry_email.delete(0, tk.END)
         self.entry_nombre.delete(0, tk.END)
         self.entry_sender.delete(0, tk.END)
         self.combo_cuentas.configure(values=lista_cuentas())
-        self.log(f"Cuenta eliminada")
+        self.log(f"[ESIMO] Cuenta eliminada")
 
     def cargar_datos(self):
-        archivo = filedialog.askopenfilename(title="Archivo", filetypes=[("Excel", "*.xlsx *.xls"), ("CSV", "*.csv")])
+        archivo = filedialog.askopenfilename(title="Seleccionar archivo", filetypes=[("Excel", "*.xlsx *.xls"), ("CSV", "*.csv")])
         if archivo:
             try:
                 self.datos, self.stats = leer_archivo_datos(archivo)
-                self.lbl_datos.configure(text=f"{self.stats['total']} registros")
-                self.log(f"Archivo: {self.stats['total']} registros")
+                self.lbl_datos.configure(text=f"✅ {self.stats['total']} registros cargados", text_color=self.color_success)
+                self.actualizar_resumen()
+                self.log(f"[ESIMO] Archivo: {self.stats['total']} registros")
+                if self.template_seleccionado:
+                    subject = obtener_subject_template(self.template_seleccionado, self.datos[0].get('address', ''))
+                    self.lbl_subject.configure(text=f"Asunto: {subject}", text_color=self.color_company)
             except Exception as e:
                 messagebox.showerror("Error", str(e))
+                self.log(f"[ERROR] {str(e)}")
 
-    def seleccionar_template(self):
+    def seleccionar_template(self, val=None):
         self.template_seleccionado = self.combo_template.get()
         if self.template_seleccionado:
             if self.datos:
                 subject = obtener_subject_template(self.template_seleccionado, self.datos[0].get('address', ''))
-                self.lbl_subject.configure(text=f"Subject: {subject}")
-            self.log(f"Template: {self.template_seleccionado}")
+                self.lbl_subject.configure(text=f"Asunto: {subject}", text_color=self.color_company)
+            else:
+                self.lbl_subject.configure(text=f"Template: {self.template_seleccionado}", text_color=self.color_company)
+            self.actualizar_resumen()
+            self.log(f"[ESIMO] Template: {self.template_seleccionado}")
 
     def ver_preview(self):
         if not self.template_seleccionado:
-            messagebox.showwarning("!", "Seleccione un template")
+            messagebox.showwarning("!", "Seleccione template")
             return
         try:
             from src.templates import aplicar_variables
-            html = aplicar_variables(
-                obtener_template(self.template_seleccionado),
-                {'Folio Number': 'EX', 'Property Address': '123 St'}
-            )
+            html = aplicar_variables(obtener_template(self.template_seleccionado), {'Folio Number': 'EXAMPLE-001', 'Property Address': '123 Main Street'})
             import tempfile, webbrowser
             with tempfile.NamedTemporaryFile(suffix='.html', delete=False, mode='w', encoding='utf-8') as f:
                 f.write(html)
                 webbrowser.open(f.name)
-            self.log("Preview abierta en navegador")
+            self.log(f"[ESIMO] Preview abierta")
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
     def seleccionar_adjunto(self):
-        archivo = filedialog.askopenfilename(title="Adjunto", filetypes=[("PDF", "*.pdf"), ("Todos", "*.*")])
+        archivo = filedialog.askopenfilename(title="Seleccionar adjunto", filetypes=[("PDF", "*.pdf"), ("Todos", "*.*")])
         if archivo:
             self.adjunto = archivo
-            self.lbl_adj.configure(text=os.path.basename(archivo))
-            self.log(f"Adjunto: {os.path.basename(archivo)}")
+            self.lbl_adj.configure(text=f"📎 {os.path.basename(archivo)}", text_color=self.color_company)
+            self.actualizar_resumen()
+            self.log(f"[ESIMO] Adjunto: {os.path.basename(archivo)}")
 
     def enviar_emails(self):
-        if not self.datos or not self.template_seleccionado or not obtener_cuenta_activa():
-            messagebox.showwarning("!", "Complete todos los datos")
+        if not self.datos:
+            messagebox.showwarning("!", "Cargue archivo de datos")
+            return
+        if not self.template_seleccionado:
+            messagebox.showwarning("!", "Seleccione template")
+            return
+        cuenta = obtener_cuenta_activa()
+        if not cuenta:
+            messagebox.showwarning("!", "Seleccione cuenta")
             return
         if not messagebox.askyesno("Confirmar", f"¿Enviar {len(self.datos)} emails?"):
             return
         try:
             template = obtener_template(self.template_seleccionado)
             subject = obtener_subject_template(self.template_seleccionado, self.datos[0].get('address', ''))
-            cuenta = obtener_cuenta_activa()
             Gmail = GmailBorrador(cuenta['email'], cuenta['app_password'])
-            self.btn_enviar.configure(state="disabled")
-            self.log(f"Enviando {len(self.datos)}...")
+            self.btn_enviar.configure(state="disabled", text="ENVIANDO...")
+            self.log(f"[ESIMO] Enviando {len(self.datos)}...")
 
             def proceso():
                 try:
-                    stats = Gmail.crear_borradores(
-                        datos=self.datos,
-                        template=template,
-                        subject=subject,
-                        adjunto=self.adjunto,
-                        sender_name=cuenta.get('sender_name', ''),
-                        callback=self.log
-                    )
-                    self.root.after(0, lambda: messagebox.showinfo("Completado", f"OK: {stats['creados']}"))
+                    stats = Gmail.crear_borradores(datos=self.datos, template=template, subject=subject, adjunto=self.adjunto, sender_name=cuenta.get('sender_name', ''), callback=self.log)
+                    self.root.after(0, lambda: messagebox.showinfo("Completado", f"OK: {stats['creados']} | Errores: {stats['fallidos']}"))
+                    self.root.after(0, lambda: self.btn_enviar.configure(state="normal", text="ENVIAR EMAILS"))
                 except Exception as ex:
                     self.root.after(0, lambda: messagebox.showerror("Error", str(ex)))
-                self.root.after(0, lambda: self.btn_enviar.configure(state="normal"))
+                    self.root.after(0, lambda: self.btn_enviar.configure(state="normal", text="ENVIAR EMAILS"))
 
             Thread(target=proceso, daemon=True).start()
         except Exception as e:
@@ -256,4 +313,4 @@ class EmailMasivoApp:
 
 
 if __name__ == '__main__':
-    EmailMasivoApp()
+    ESIMOApp()
