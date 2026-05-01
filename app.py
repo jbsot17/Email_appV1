@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from pathlib import Path
 from threading import Thread
+from PIL import Image
 import customtkinter as ctk
 
 ctk.set_appearance_mode("system")
@@ -27,8 +28,9 @@ class ESIMOApp:
         self.root.title("ESIMO - ESI MailOps")
         self.root.geometry("950x680")
         self.root.minsize(850, 620)
+        self.root.iconbitmap(str(Path(__file__).parent / "images" / "logo.ico"))
         
-        self.color_company = "#DC000D"
+        self.color_company = "#2b2b2b"
         self.color_success = "#2CC985"
         self.color_danger = "#FF5C5C"
         self.color_warning = "#F59E0B"
@@ -42,15 +44,28 @@ class ESIMOApp:
         self.crear_interfaz()
 
     def crear_interfaz(self):
+        self.root.grid_rowconfigure(0, weight=0)
+        self.root.grid_rowconfigure(1, weight=0)
+        self.root.grid_rowconfigure(2, weight=0)
+        self.root.grid_rowconfigure(3, weight=0)
+        self.root.grid_rowconfigure(4, weight=0)
         self.root.grid_rowconfigure(5, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
         
-        # === HEADER ===
+        # === HEADER (row 0) ===
         header = ctk.CTkFrame(self.root, fg_color=self.color_company, height=75)
-        header.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
-        header.grid_propagate(False)
-        ctk.CTkLabel(header, text="ESIMO", font=("Roboto", 34, "bold"), text_color="white").pack(pady=(8, 0))
-        ctk.CTkLabel(header, text="ESI MailOps", font=("Roboto", 12), text_color="white").pack(pady=(0, 8))
+        header.grid(row=0, column=0, sticky="ew", padx=15, pady=(10, 0))
+        
+        logo_path = Path(__file__).parent / "images" / "logo.png"
+        if logo_path.exists():
+            logo_img = ctk.CTkImage(Image.open(logo_path), size=(55, 55))
+            ctk.CTkLabel(header, image=logo_img, text="").pack(side="left", padx=(10, 5))
+        
+        header_content = ctk.CTkFrame(header, fg_color=self.color_company)
+        header_content.pack(side="left", expand=True)
+        
+        ctk.CTkLabel(header_content, text="ESIMO", font=("Roboto", 34, "bold"), text_color="white").pack(anchor="center", pady=(10, 0))
+        ctk.CTkLabel(header_content, text="ESI MailOps", font=("Roboto", 12), text_color="white").pack(anchor="center", pady=(0, 8))
         
         # === 1. CUENTA GMAIL (row 1) ===
         f1 = ctk.CTkFrame(self.root)
