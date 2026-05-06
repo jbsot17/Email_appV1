@@ -5,55 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recertification Status Inquiry</title>
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #333333; background-color: #f5f5f5; margin: 0; padding: 20px; }
-        .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px 40px; }
-        .greeting { font-size: 16px; margin-bottom: 18px; }
-        .message { font-size: 15px; margin-bottom: 15px; }
-        .property-box { background: #f9f9f9; padding: 15px; margin: 20px 0; }
-        .property-label { font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
-        .property-value { font-size: 15px; font-weight: bold; }
-        .cta { margin: 25px 0; }
-        .cta a { color: #0066cc; text-decoration: underline; }
-        .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid #dddddd; }
-        .signature .name { font-weight: bold; font-size: 15px; color: #333333; }
-        .signature .title { font-size: 13px; color: #666666; margin-bottom: 8px; }
-        .signature .contact { font-size: 13px; color: #333333; }
+        body { margin: 0; padding: 20px; background-color: #f5f5f5; text-align: left; font-family: Arial, Helvetica, sans-serif; color: #333333; }
+        .greeting { font-size: 16px; line-height: 1.6; margin-bottom: 18px; text-align: left; }
+        .message { font-size: 15px; line-height: 1.6; margin-bottom: 15px; text-align: left; }
+        .property-box { background: #f9f9f9; padding: 15px; margin: 20px 0; text-align: left; }
+        .property-label { font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; text-align: left; }
+        .property-value { font-size: 15px; font-weight: bold; text-align: left; }
+        .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid #dddddd; text-align: left; }
+        .signature .name { font-weight: bold; font-size: 15px; color: #333333; text-align: left; }
+        .signature .title { font-size: 13px; color: #666666; margin-bottom: 8px; text-align: left; }
+        .signature .contact { font-size: 13px; color: #333333; text-align: left; }
         .signature .contact a { color: #0066cc; text-decoration: none; }
-        .signature .company { color: #dc000d; font-weight: bold; font-size: 14px; }
-        .signature .motto { font-size: 11px; color: #888888; font-style: italic; margin-top: 8px; }
+        .signature .company { color: #dc000d; font-weight: bold; font-size: 14px; text-align: left; }
+        .signature .motto { font-size: 11px; color: #888888; font-style: italic; margin-top: 8px; text-align: left; }
     </style>
 </head>
 <body>
-    <div class="email-container">
-        <p class="greeting">Hi,</p>
-        
-        <p class="message">I came across {{Property Address}} (Folio {{Folio Number}}), it looks like this property may be coming up on a recertification requirement under Section 8-11(f) of Miami-Dade County rules.</p>
-        
-        <p class="message">Do you already have someone handling this? If yes, great. If not, it might be worth a quick conversation before the deadline creates pressure.</p>
-        
-        <p class="message">We handle structural, electrical, thermographic infrared (IR), and nighttime parking lot illumination inspections and reports for recertifications across South Florida (all four under one roof).</p>
-        
-        <p class="message">Just reply here if you'd like to talk. No pitch, just a conversation. We would be happy to explain or answer any questions you might have.</p>
-        
-        <div class="property-box">
-            <p class="property-label">Property Address</p>
-            <p class="property-value">{{Property Address}}</p>
-            <p class="property-label" style="margin-top: 12px;">Folio Number</p>
-            <p class="property-value">{{Folio Number}}</p>
-        </div>
-        
-        <p class="message">Best,</p>
-        
-        <div class="signature">
-            <p class="name">Genesis Torrealba</p>
-            <p class="title">Sales & Operations Coordinator</p>
-            <p class="contact">
-                <a href="mailto:gt@engsv.com">gt@engsv.com</a> | <strong>Direct:</strong> 954-951-1482<br>
-                <span class="company">Engineering Services, Inc.</span><br>
-                Office: 954-951-2121 | <a href="https://engsv.com/recertification">engsv.com</a>
-            </p>
-            <p class="motto">Committed engineering. Seamless compliance.</p>
-        </div>
+    <div style="display: none; max-height: 0px; overflow: hidden; color: transparent; font-size: 0px; line-height: 0px; mso-hide: all;">
+        Takes 30 seconds (Folio {{Folio Number}})
+    </div>
+    
+    <p class="greeting">Hi,</p>
+    
+    <p class="message">I came across {{Property Address}} (Folio {{Folio Number}}) and it looks like the property may be coming up for recertification under Miami-Dade County rules.</p>
+    
+    <p class="message">Do you already have someone handling it? If not, it might be worth a quick chat before the deadline adds any pressure.</p>
+    
+    <p class="message">We handle all four required inspections (structural, electrical, infrared, and parking lot lighting) under one roof, so it's much less hassle for owners.</p>
+    
+    <p class="message">Just reply if you'd like more info or a status check. No pitch, no pressure.</p>
+    
+    <p class="message">Best,</p>
+    
+    <div class="property-box">
+        <p class="property-label">Property Address</p>
+        <p class="property-value">{{Property Address}}</p>
+        <p class="property-label" style="margin-top: 12px;">Folio Number</p>
+        <p class="property-value">{{Folio Number}}</p>
+    </div>
+    
+    <div class="signature">
+        <p class="name">Genesis Torrealba</p>
+        <p class="title">Sales & Operations Coordinator</p>
+        <p class="contact">
+            <a href="mailto:gt@engsv.com">gt@engsv.com</a> | <strong>Direct:</strong> 954-951-1482<br>
+            <span class="company">Engineering Services, Inc.</span><br>
+            Office: 954-951-2121 | <a href="https://engsv.com/recertification">engsv.com</a>
+        </p>
+        <p class="motto">Committed engineering. Seamless compliance.</p>
     </div>
 </body>
 </html>
