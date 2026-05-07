@@ -254,7 +254,7 @@ class ESIMOApp:
                 self.log(f"[ESIMO] Archivo: {self.stats['total']} registros")
                 if self.template_seleccionado:
                     subject = obtener_subject_template(self.template_seleccionado, self.datos[0].get('address', ''))
-                    self.lbl_subject.configure(text=f"Asunto: {subject}", text_color=self.color_company)
+                    self.lbl_subject.configure(text=f"Asunto: {subject}", text_color=self.color_success)
             except Exception as e:
                 messagebox.showerror("Error", str(e))
                 self.log(f"[ERROR] {str(e)}")
@@ -264,9 +264,9 @@ class ESIMOApp:
         if self.template_seleccionado:
             if self.datos:
                 subject = obtener_subject_template(self.template_seleccionado, self.datos[0].get('address', ''))
-                self.lbl_subject.configure(text=f"Asunto: {subject}", text_color=self.color_company)
+                self.lbl_subject.configure(text=f"Asunto: {subject}", text_color=self.color_success)
             else:
-                self.lbl_subject.configure(text=f"Template: {self.template_seleccionado}", text_color=self.color_company)
+                self.lbl_subject.configure(text=f"Template: {self.template_seleccionado}", text_color=self.color_success)
             self.actualizar_resumen()
             self.log(f"[ESIMO] Template: {self.template_seleccionado}")
 
@@ -289,7 +289,7 @@ class ESIMOApp:
         archivo = filedialog.askopenfilename(title="Seleccionar adjunto", filetypes=[("PDF", "*.pdf"), ("Todos", "*.*")])
         if archivo:
             self.adjunto = archivo
-            self.lbl_adj.configure(text=f"📎 {os.path.basename(archivo)}", text_color=self.color_company)
+            self.lbl_adj.configure(text=f"📎 {os.path.basename(archivo)}", text_color=self.color_success)
             self.actualizar_resumen()
             self.log(f"[ESIMO] Adjunto: {os.path.basename(archivo)}")
 
