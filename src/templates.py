@@ -7,10 +7,11 @@ from typing import List, Dict
 # Subjects por defecto para cada template
 SUBJECTS = {
     'template1.html': 'Quick question about {address} recertification',
-    'template2.html': 'Why you should not wait on the Recertification of {address}',
-    'template3.html': 'How to make the Recertification of {address} easier',
-    'template4.html': 'When selecting a consultant for {address} Recertification',
-    'template5.html': '{address} - Should I close your file?'
+    'template2.html': 'Why its usually better not to wait on {address} recertification',
+    'template3.html': 'How to make the Recertification of {address} simpler',
+    'template4.html': 'Important difference when choosing help for {address}',
+    'template4_planB.html': 'Important difference when choosing help for {address}',
+    'template5.html': '{address} recertification. Should I close your file?'
 }
 
 
