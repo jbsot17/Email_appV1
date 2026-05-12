@@ -70,12 +70,13 @@ class GmailBorrador:
             print(f"Error: {e}")
             return str(e)
     
-    def crear_borradores(self, datos: List[Dict], template: str, subject: str,
+    def crear_borradores(self, datos: List[Dict], template: str, template_name: str,
                         adjunto: Optional[str] = None,
                         callback: Optional[Callable] = None,
                         delay: float = 1.0,
                         sender_name: Optional[str] = None) -> Dict:
         """Crea múltiples emails."""
+        from src.templates import obtener_subject_template
         import time
         
         stats = {'creados': 0, 'fallidos': 0, 'total': len(datos)}
@@ -86,6 +87,7 @@ class GmailBorrador:
                 'Property Address': str(dato.get('address', ''))
             }
             
+            subject = obtener_subject_template(template_name, str(dato.get('address', '')))
             body = aplicar_variables_a_template(template, variables)
             destino = dato.get('email', '')
             

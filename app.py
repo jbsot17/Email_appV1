@@ -308,14 +308,13 @@ class ESIMOApp:
             return
         try:
             template = obtener_template(self.template_seleccionado)
-            subject = obtener_subject_template(self.template_seleccionado, self.datos[0].get('address', ''))
             Gmail = GmailBorrador(cuenta['email'], cuenta['app_password'])
             self.btn_enviar.configure(state="disabled", text="ENVIANDO...")
             self.log(f"[ESIMO] Enviando {len(self.datos)}...")
 
             def proceso():
                 try:
-                    stats = Gmail.crear_borradores(datos=self.datos, template=template, subject=subject, adjunto=self.adjunto, sender_name=cuenta.get('sender_name', ''), callback=self.log)
+                    stats = Gmail.crear_borradores(datos=self.datos, template=template, template_name=self.template_seleccionado, adjunto=self.adjunto, sender_name=cuenta.get('sender_name', ''), callback=self.log)
                     self.root.after(0, lambda: messagebox.showinfo("Completado", f"OK: {stats['creados']} | Errores: {stats['fallidos']}"))
                     self.root.after(0, lambda: self.btn_enviar.configure(state="normal", text="ENVIAR EMAILS"))
                 except Exception as ex:
