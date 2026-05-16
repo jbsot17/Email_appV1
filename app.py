@@ -149,7 +149,14 @@ class ESIMOApp:
         ctk.CTkLabel(f4, text="4. Adjunto", font=("Roboto", 13, "bold")).pack(anchor="w", padx=10, pady=(5, 2))
         ctk.CTkButton(f4, text="Seleccionar PDF", command=self.seleccionar_adjunto, width=150).pack(anchor="w", padx=10, pady=(0, 3))
         self.lbl_adj = ctk.CTkLabel(f4, text="Ninguno", text_color="gray", font=("Roboto", 10))
-        self.lbl_adj.pack(anchor="w", padx=10, pady=(0, 6))
+        self.lbl_adj.pack(anchor="w", padx=10, pady=(0, 3))
+
+        bcc_frame = ctk.CTkFrame(f4, fg_color="transparent")
+        bcc_frame.pack(anchor="w", padx=10, pady=(0, 6))
+        ctk.CTkLabel(bcc_frame, text="BCC (oculta):", font=("Roboto", 11)).pack(side="left")
+        self.entry_bcc = ctk.CTkEntry(bcc_frame, width=220, font=("Roboto", 11))
+        self.entry_bcc.pack(side="left", padx=3)
+        self.entry_bcc.insert(0, "recertificación@engsv.com")
         
         # Boton ENVIAR (derecha, fijo)
         self.btn_enviar = ctk.CTkButton(
@@ -314,7 +321,7 @@ class ESIMOApp:
 
             def proceso():
                 try:
-                    stats = Gmail.crear_borradores(datos=self.datos, template=template, template_name=self.template_seleccionado, adjunto=self.adjunto, sender_name=cuenta.get('sender_name', ''), callback=self.log)
+                    stats = Gmail.crear_borradores(datos=self.datos, template=template, template_name=self.template_seleccionado, adjunto=self.adjunto, sender_name=cuenta.get('sender_name', ''), callback=self.log, bcc=self.entry_bcc.get().strip())
                     self.root.after(0, lambda: messagebox.showinfo("Completado", f"OK: {stats['creados']} | Errores: {stats['fallidos']}"))
                     self.root.after(0, lambda: self.btn_enviar.configure(state="normal", text="ENVIAR EMAILS"))
                 except Exception as ex:

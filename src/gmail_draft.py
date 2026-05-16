@@ -21,7 +21,8 @@ class GmailBorrador:
     
     def crear_borrador(self, destinatario: str, subject: str, body_html: str, 
                     adjunto: Optional[str] = None,
-                    sender_name: Optional[str] = None) -> bool:
+                    sender_name: Optional[str] = None,
+                    bcc: Optional[str] = None) -> bool:
         """Crea y envía un email."""
         try:
             # Crear mensaje MIME
@@ -35,6 +36,8 @@ class GmailBorrador:
             
             msg['From'] = from_header
             msg['To'] = destinatario
+            if bcc:
+                msg['Bcc'] = bcc
             msg['Subject'] = subject
             
             # Parte HTML
@@ -74,7 +77,8 @@ class GmailBorrador:
                         adjunto: Optional[str] = None,
                         callback: Optional[Callable] = None,
                         delay: float = 1.0,
-                        sender_name: Optional[str] = None) -> Dict:
+                        sender_name: Optional[str] = None,
+                        bcc: Optional[str] = None) -> Dict:
         """Crea múltiples emails."""
         from src.templates import obtener_subject_template
         import time
@@ -91,7 +95,7 @@ class GmailBorrador:
             body = aplicar_variables_a_template(template, variables)
             destino = dato.get('email', '')
             
-            resultado = self.crear_borrador(destino, subject, body, adjunto, sender_name)
+            resultado = self.crear_borrador(destino, subject, body, adjunto, sender_name, bcc)
             
             if resultado is True:
                 stats['creados'] += 1
